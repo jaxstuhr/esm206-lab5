@@ -27,8 +27,77 @@ Create single mock sample containing a number of values, then learn to use 't.te
 # Create mock sample (vector of vals)
 otter_lengths = c(22, 34, 26, 28, 39)
 # Find confidence interval from sample, t distribution
-t.test(otter_lengths)
+otter_ci = t.test(otter_lengths)
 # Find standard dev
-sd(otter_lengths)
+otter_sd = sd(otter_lengths)
 ```
-Mean otter length is 29.8 inches $/pm$
+Mean otter length is 29.8 inches $\pm$ 6.7 (mean $\pm$ sd, n = 5) with a 95% confidence interval of [21.5, 38.1]
+
+#### Now using in-line referencing
+
+Mean otter length is `r round(otter_ci$estimate, 1)` inches with a 95% confidence interval of [`r round(otter_ci$conf.int[1], 1)`, `r round(otter_ci$conf.int[2], 1)`] inches.
+
+## Part 2: Two-sample t-tests
+
+Make two mock samples and ask question: do we have sufficient evidence to reject null hypotheses that these samples were drawn from popus w same mean
+
+```{r}
+# make me mock samples
+oak_trees = c(20, 19, 24, 28, 34, 12, 15, 25)
+pine_trees = c(39, 26, 20, 30, 37, 22, 19, 18)
+
+# two-sample t-test
+trees_t = t.test(oak_trees, pine_trees)
+```
+If samples were drawn from popus w the same mean, there is a 28.7% chance of taking samples from those populations with means at least as different as these observed means. 
+
+The mean heights of oak and pine trees were (x +- y) and (x +- y), and the difference was not significant (t(`r round(trees_t$parameter,1)`) = `r round(trees_t$statistic,1)`, p = `r round(trees_t$p.value,1)`)
+
+## Part 3: t-test w cars data
+
+```{r}
+compact_suv = mpg %>% 
+  filter(class %in% c("compact", "suv"))
+```
+
+Create a histogram of city gas mileage (cty) faceted by class starting from compact_suv
+
+```{r}
+ggplot(data = compact_suv, aes(x = cty)) + 
+  geom_histogram(bins = 12) + 
+  facet_wrap(~ class)
+```
+
+```{r}
+car_stats = compact_suv %>% 
+  group_by(class) %>% 
+  summarize(
+    mean_city = round(mean(cty), 2),
+    sd_city = sd(cty),
+    sample_size = n()
+  )
+
+car_stats
+```
+The t.test function wants vectors! Use `pull()` function to pull out vector from data frame.
+
+```{r}
+compact_sample = compact_suv %>% 
+  filter(class == "compact") %>% 
+  pull(cty)
+
+suv_sample = compact_suv %>% 
+  filter(class == "suv") %>% 
+  pull(cty)
+```
+
+```{r}
+t.test(compact_sample, suv_sample)
+```
+
+Reject the nULLL!!!!!!
+
+
+
+
+
