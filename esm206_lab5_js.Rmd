@@ -2,29 +2,33 @@
 title: "Lab 5"
 author: "Jaxon Stuhr"
 date: "10/25/2021"
-output: html_document
+output: 
+  html_document: 
+    theme: journal
+    toc: yes
+    code_folding: hide
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=TRUE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(effsize)
 ```
 
-## R Markdown
+## Part 1: Confidence Intervals
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Using the 't.test()' to calculate confidence intervals
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+### Example 1
 
-```{r cars}
-summary(cars)
+Create single mock sample containing a number of values, then learn to use 't.test()' to return confidence intervals and learn about in-line code referencing.
+
+```{r}
+# Create mock sample (vector of vals)
+otter_lengths = c(22, 34, 26, 28, 39)
+# Find confidence interval from sample, t distribution
+t.test(otter_lengths)
+# Find standard dev
+sd(otter_lengths)
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Mean otter length is 29.8 inches $/pm$
